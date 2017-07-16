@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Time2 Toggles Module
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ *
+ * @category   Time2
+ * @package    Time2_Adminlog
+ * @copyright  Copyright (c) 2013 Time2 Digital (http://time2.digital)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Time2_Adminlog>
+            <version>1.0.0</version>
+        </Time2_Adminlog>
+    </modules>
+    <global>
+        <models>
+            <time2_adminlog>
+                <class>Time2_Adminlog_Model</class>
+                <resourceModel>time2_adminlog_resource</resourceModel>
+            </time2_adminlog>
+            <time2_adminlog_resource>
+                <class>Time2_Adminlog_Model_Resource</class>
+                <entities>
+                    <logins>
+                        <table>admin_user_login_attempt</table>
+                    </logins>
+                </entities>
+            </time2_adminlog_resource>
+        </models>
+        <blocks>
+            <time2_adminlog>
+                <class>Time2_Adminlog_Block</class>
+            </time2_adminlog>
+            <adminhtml>
+                <rewrite>
+                    <permissions_user_edit_tabs>Time2_Adminlog_Block_Adminhtml_Permissions_User_Edit_Tabs_LoginAttempts</permissions_user_edit_tabs>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <helpers>
+            <time2_adminlog>
+                <class>Time2_Adminlog_Helper</class>
+            </time2_adminlog>
+        </helpers>
+        <resources>
+            <time2_adminlog_setup>
+                <setup>
+                    <module>Time2_Adminlog</module>
+                    <!--<class>Time2_Adminlog_Model_Resource_Setup</class>-->
+                </setup>
+            </time2_adminlog_setup>
+        </resources>
+        <events>
+            <controller_front_init_routers>
+                <observers>
+                    <adminlog_config>
+                        <type>model</type>
+                        <class>Time2_Adminlog_Model_Observer</class>
+                        <method>checkForConfigRequest</method>
+                    </adminlog_config>
+                </observers>
+            </controller_front_init_routers>
+            <admin_user_authenticate_before>
+                <observers>
+                    <time2_adminlog_authbefore>
+                        <type>model</type>
+                        <class>Time2_Adminlog_Model_Observer</class>
+                        <method>logAdminUserAuthenticateBefore</method>
+                    </time2_adminlog_authbefore>
+                </observers>
+            </admin_user_authenticate_before>
+            <admin_user_authenticate_after>
+                <observers>
+                    <time2_adminlog_authafter>
+                        <type>model</type>
+                        <class>Time2_Adminlog_Model_Observer</class>
+                        <method>logAdminUserAuthenticateAfter</method>
+                    </time2_adminlog_authafter>
+                </observers>
+            </admin_user_authenticate_after>
+            <admin_session_user_login_success>
+                <observers>
+                    <time2_adminlog_success>
+                        <type>model</type>
+                        <class>Time2_Adminlog_Model_Observer</class>
+                        <method>logAdminUserLoginSuccess</method>
+                    </time2_adminlog_success>
+                </observers>
+            </admin_session_user_login_success>
+            <admin_session_user_login_failed>
+                <observers>
+                    <time2_adminlog_failed>
+                        <type>model</type>
+                        <class>Time2_Adminlog_Model_Observer</class>
+                        <method>logAdminUserLoginFailed</method>
+                    </time2_adminlog_failed>
+                </observers>
+            </admin_session_user_login_failed>
+        </events>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <adminlog before="Mage_Adminhtml">Time2_Adminlog_Adminhtml</adminlog>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <adminlog_security translate="title" module="time2_adminlog">
+                                            <title><![CDATA[Expocart: Security]]></title>
+                                            <sort_order>2000</sort_order>
+                                        </adminlog_security>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <frontend>
+    </frontend>
+    <default>
+        <adminlog>
+            <cleanup>
+                <cleanup_probability>100</cleanup_probability>
+                <expiration_period>120</expiration_period>
+            </cleanup>
+            <email>
+                <identity>general</identity>
+                <template>adminlog_email_template</template>
+            </email>
+        </adminlog>
+    </default>
+</config>

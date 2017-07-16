@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Time2_Adminlog>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Time2_Adminlog>
+    </modules>
+</config>
